@@ -16,8 +16,6 @@ const corsOptions ={
 const app = express()
 
 // MIDDLEWARE
-// parse application/x-www-form-urlencoded
-// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser())
 
 // parse application/json
@@ -27,8 +25,7 @@ app.use(bodyParser.json());
 app.use(cors(corsOptions));
 
 // Routes 
-// app.use('/api', require('./routes/home.route'));
-// app.use('/api/admin', require('./routes/admin.route.js'));
+app.use('/api', require('./routes/home.route.js'));
 app.use('/api/client', require('./routes/client.route.js'));
 app.use('/api/user', require('./routes/user.route.js'));
 
