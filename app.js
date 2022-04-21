@@ -26,7 +26,7 @@ app.use(cors(corsOptions));
 
 // Routes 
 app.use('/api', require('./routes/home.route.js'));
-app.use('/api/client', require('./routes/client.route.js'));
+app.use('/api/client', 'etsa2/build', require('./routes/client.route.js'));
 app.use('/api/user', require('./routes/user.route.js'));
 
 // Start server
