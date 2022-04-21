@@ -42,6 +42,7 @@ const userController = {
       (err, locationId) => {
         let location = locationId[0].organizationLocation;
         let companyTime = locationId[0].clockInTime;
+        let companyId = locationId[0].companyId;
 
         let ray = ray_casting(userCurrentPosition, location);
 
