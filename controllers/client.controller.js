@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
 
+const router = express.Router();
+
 const newClient = {
 
   // client sign up
@@ -111,6 +113,6 @@ const newClient = {
   },
 };
 
-
+module.exports = router;
 module.exports = newClient;
 
