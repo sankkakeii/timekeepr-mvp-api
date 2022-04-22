@@ -8,7 +8,7 @@ const options = {
 
 module.exports =  async (URL) => {
     try {
-        mongoose.connect(URL, options);
+        mongoose.createConnection(URL, options);
         console.log(`Connected to database`);
     } catch (error) {
         throw new Error(error.message);   
