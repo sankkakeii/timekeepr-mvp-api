@@ -31,6 +31,6 @@ app.use('/api/user', require('./routes/user.route.js'));
 
 // Start server
 app.listen( process.env.PORT || 3000, async () => {
-    await Mongo(DB_URL)
+    await Mongo(`${DB_URL}`)
     console.log(`the server is running on Port ${PORT}`);
 });
