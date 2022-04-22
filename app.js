@@ -1,7 +1,7 @@
 // Require packages
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-require('dotenv').config();
 const Mongo = require('./config/mongo.config')
 const {PORT, BASE_URL, DB_URL} = process.env
 const cookieParser = require('cookie-parser')
