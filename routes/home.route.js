@@ -3,8 +3,6 @@ const router = express.Router();
 const userController = require('../controllers/user.controller');
 
 
-router.get('/', (req, res) => {
-    res.send('welcome to timekeepr')
-});
+router.get('/', userController.login);
 
 module.exports = router;
