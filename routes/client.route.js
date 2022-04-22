@@ -5,9 +5,9 @@ const checkNumber = require('../middleware/news.middleware');
 const clientMiddleware = require('../middleware/client.middleware');
 
 /* CLIENTS WILL BE CALLED TENANTS INTERCHANGEABLY */
-router.post('/', (req, res) => {
-    res.send('client route');
-});
+// router.post('/', (req, res) => {
+//     res.send('client route');
+// });
 router.post('/sign-up', clientController.signUp);
 router.post('/login', clientController.login);
 router.get('/dashboard', clientController.dashboard);
