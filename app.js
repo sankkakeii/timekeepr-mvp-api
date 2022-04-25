@@ -2,16 +2,11 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const Mongo = require('./config/mongo.config')
+const Mongo  = require('./config/mongo.config')
 const {PORT, BASE_URL, DB_URL} = process.env
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
 
-const corsOptions ={
-    origin:'http://localhost:5002', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
 // installing packages
 const app = express()
 
@@ -22,7 +17,7 @@ app.use(cookieParser())
 app.use(bodyParser.json());
 
 // use cors
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 // Routes 
 app.use('/api', require('./routes/home.route.js'));

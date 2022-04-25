@@ -13,46 +13,57 @@ const newClient = {
   signUp: async (req, res) =>{
     // register new user
     try{
-    const {email,password} = req.body;
-    const hashedPassword = bcrypt.hashSync(password, 10);
-    const client = await new Client({password:hashedPassword,email});
-    client.save().then(clientInfo => {
-      jwt.sign({id:clientInfo._id,email:clientInfo.email}, process.env.JWTPRIVATEKEY, (err,token) => {
-        if (err) {
-          console.log(err);
-          res.sendStatus(500);
-        } else {
-          res.cookie('token', token).json({id:clientInfo._id,email:clientInfo.email});
-        }
+      const { email, password } = req.body;
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      const client = await new Client({ password: hashedPassword, email });
+      client.save().then((clientInfo) => {
+        jwt.sign(
+          { id: clientInfo._id, email: clientInfo.email },
+          process.env.JWTPRIVATEKEY,
+          (err, token) => {
+            if (err) {
+              console.log(err);
+              res.sendStatus(500);
+            } else {
+              res
+                .cookie("token", token)
+                .json({ id: clientInfo._id, email: clientInfo.email });
+            }
+          }
+        );
       });
-    });
     } catch(err){
-      return err
+      res.send(err.message)
     }
   },
 
   // client login
   login: async(req, res) => {
-    const {email,password} = req.body;
-    await Client.findOne({email})
-      .then(clientInfo => {
-        if (!clientInfo) {
-          return res.sendStatus(401);
-        }
-        const passOk = bcrypt.compareSync(password, clientInfo.password);
-        if (passOk) {
-          jwt.sign({id:clientInfo._id,email}, process.env.JWTPRIVATEKEY, (err,token) => {
-            if (err) {
-              console.log(err);
-              res.sendStatus(500);
-            } else {
-              res.cookie('token', token).json({id:clientInfo._id,email:clientInfo.email});
-            }
-          });
-        } else {
-          res.sendStatus(401);
-        }
-      })
+    try{
+      const {email,password} = req.body;
+      await Client.findOne({email})
+        .then(clientInfo => {
+          if (!clientInfo) {
+            return res.sendStatus(401);
+          }
+          const passOk = bcrypt.compareSync(password, clientInfo.password);
+          if (passOk) {
+            jwt.sign({id:clientInfo._id,email}, process.env.JWTPRIVATEKEY, (err,token) => {
+              if (err) {
+                console.log(err);
+                res.sendStatus(500);
+              } else {
+                res.cookie('token', token).json({id:clientInfo._id,email:clientInfo.email});
+              }
+            });
+          } else {
+            res.sendStatus(401);
+          }
+        })
+
+    }catch (err){
+      res.send(err.message)
+    }
   },
 
   dashboard: async (req, res) =>{
@@ -61,7 +72,8 @@ const newClient = {
   }, 
 
   addUser: async (req, res) =>{
-    // create and add user to the database
+    try {
+          // create and add user to the database
     const payload = jwt.verify(req.cookies.token, process.env.JWTPRIVATEKEY);
     const user = await new User({
       email: req.body.email,
@@ -73,12 +85,15 @@ const newClient = {
     user.save().then((user) => {
       res.json(user);
     });
+    } catch (err) {
+      res.send(err.message)
+    }
     
   },
 
   addLocation: async (req, res) => {
+    try {
     // create and add location  to the database
-
     const payload = jwt.verify(req.cookies.token, process.env.JWTPRIVATEKEY);
     const location = await new Location({
       companyName: req.body.companyName,
@@ -89,6 +104,9 @@ const newClient = {
     location.save().then((location) => {
       res.json(location);
     });
+    } catch (err) {
+      res.send(err.message)
+    }
   },
 
   viewUsers: async (req, res) =>{
