@@ -37,7 +37,7 @@ const newClient = {
   login: async(req, res) => {
     try{
       const {email,password} = req.body;
-      Client.findOne({email})
+      await Client.findOne({email})
         .then(clientInfo => {
           if (!clientInfo) {
             return res.sendStatus(401);
