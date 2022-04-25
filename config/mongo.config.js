@@ -12,6 +12,6 @@ module.exports =  async (URL) => {
         mongoose.connect(URL, options);
         console.log(`Connected to database`);
     } catch (error) {
-        throw new Error(error.message);   
+        console.log(`failed to connect to database ${error.message}`);   
     }
 }
