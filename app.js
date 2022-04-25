@@ -3,9 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const Mongo  = require('./config/mongo.config')
-const {PORT, BASE_URL, DB_URL} = process.env
+const {PORT, DB_URL} = process.env
 const cookieParser = require('cookie-parser')
-const cors = require('cors');
 
 // installing packages
 const app = express()
@@ -15,9 +14,6 @@ app.use(cookieParser())
 
 // parse application/json
 app.use(bodyParser.json());
-
-// use cors
-// app.use(cors(corsOptions));
 
 // Routes 
 app.use('/api', require('./routes/home.route.js'));

@@ -12,8 +12,7 @@ const newClient = {
   // client sign up
   signUp: async (req, res) =>{
     // register new user
-    try{
-      const { email, password } = req.body;
+    const { email, password } = req.body;
       const hashedPassword = bcrypt.hashSync(password, 10);
       const client = await new Client({ password: hashedPassword, email });
       client.save().then((clientInfo) => {
@@ -32,16 +31,13 @@ const newClient = {
           }
         );
       });
-    } catch(err){
-      res.send(err.message)
-    }
   },
 
   // client login
   login: async(req, res) => {
     try{
       const {email,password} = req.body;
-      await Client.findOne({email})
+      Client.findOne({email})
         .then(clientInfo => {
           if (!clientInfo) {
             return res.sendStatus(401);
