@@ -11,7 +11,7 @@ const clientMiddleware = require('../middleware/client.middleware');
 router.post('/sign-up', clientController.signUp);
 router.post('/login', clientController.login);
 router.get('/dashboard', clientController.dashboard);
-router.put('/add-user', clientController.addUser);
+router.put('/add-client', clientController.addUser);
 router.put('/add-location', clientController.addLocation);
 // router.get('/users', checkNumber, clientController.create);
 router.get('/view-users', clientController.viewUsers);
