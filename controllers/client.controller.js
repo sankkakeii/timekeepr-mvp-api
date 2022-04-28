@@ -73,11 +73,13 @@ const newClient = {
     const payload = jwt.verify(req.cookies.token, process.env.JWTPRIVATEKEY);
     const user = await new User({
       email: req.body.email,
-      password: req.body.password,
-      name: req.body.name,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
       role: req.body.role,
+      phone: req.body.phone,
       companyId: new mongoose.Types.ObjectId(payload.id)
     });
+    console.log(user);
     user.save().then((user) => {
       res.json(user);
     });

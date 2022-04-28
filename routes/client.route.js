@@ -13,10 +13,9 @@ router.post('/login', clientController.login);
 router.get('/dashboard', clientController.dashboard);
 router.put('/add-user', clientController.addUser);
 router.put('/add-location', clientController.addLocation);
-// router.get('/users', checkNumber, clientController.create);
 router.get('/view-users', clientController.viewUsers);
 router.get('/analytics', clientController.viewAnalytics);
-router.get('/notifications', clientController.notifications);
+router.get('/notifications', clientController.notifications); 
 router.post('/settings', clientController.settings);
 
 module.exports = router;

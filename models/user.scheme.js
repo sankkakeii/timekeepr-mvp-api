@@ -1,21 +1,15 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-
+    
     companyId:{type:mongoose.SchemaTypes.ObjectId},
-    email:{
+    firstName:{
         type: String,
-        required: [true, "email is required"],
-        // minlength: 20,
+        required: [true, "name is required"],
         trim:true,
+
     },
-    password:{
-        type: String,
-        required: [true, "password is required"],
-        // minlength: 20,
-        trim:true,
-    },
-    name:{
+    lastName:{
         type: String,
         required: [true, "name is required"],
         trim:true,
@@ -24,6 +18,17 @@ const userSchema = new mongoose.Schema({
     role:{
         type: String,
         required: [true, "role is required"],
+        trim:true,
+    },
+    phone:{
+        type: String,
+        required: [true, "role is required"],
+        trim:true,
+    },
+    email:{
+        type: String,
+        required: [true, "email is required"],
+        // minlength: 20,
         trim:true,
     },
     status: {

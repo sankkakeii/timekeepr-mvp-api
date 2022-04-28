@@ -6,11 +6,11 @@ const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
 const clientSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        unique: true,
-        trim:true
-    },
+    // username: {
+    //     type: String,
+    //     unique: true,
+    //     trim:true
+    // },
     email: {
         type: String,
         required:[true, "email is required"],
