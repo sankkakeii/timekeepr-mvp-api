@@ -5,35 +5,16 @@ const bodyParser = require('body-parser');
 const Mongo  = require('./config/mongo.config')
 const {PORT, DB_URL} = process.env
 const cookieParser = require('cookie-parser')
-const mongoose  = require('mongoose');
-
 const cors = require('cors');
 
 const corsOptions ={
     origin:'http://localhost:3000', 
-    credentials:true,            //access-control-allow-credentials:true
+    credentials:true,
     optionSuccessStatus:200
 }
 
 // installing packages
 const app = express()
-
-
-
-// const options = {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// }
-
-// connect to database
-// const Mongo =  async (URL) => {
-//     try {
-//         mongoose.connect(URL, options);
-//         console.log(`Connected to database`);
-//     } catch (error) {
-//         console.log(`failed to connect to database ${error.message}`);   
-//     }
-// }
 
 // MIDDLEWARE
 app.use(cookieParser())

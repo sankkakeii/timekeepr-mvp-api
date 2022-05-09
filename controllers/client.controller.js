@@ -1,4 +1,4 @@
-const { Client, signUpValidate } = require("../models/client.scheme");
+const { Client } = require("../models/client.scheme");
 const { Location } = require("../models/location.scheme");
 const { User } = require("../models/user.scheme");
 const bcrypt = require("bcrypt");
@@ -11,7 +11,6 @@ const newClient = {
 
   // client sign up
   signUp: async (req, res) =>{
-    // register new user
     const { email, password } = req.body;
       const hashedPassword = bcrypt.hashSync(password, 10);
       const client = await new Client({ password: hashedPassword, email });
@@ -35,8 +34,8 @@ const newClient = {
 
   // client login
   login: async(req, res) => {
+    const { email, password } = req.body;
     try{
-      const {email,password} = req.body;
       await Client.findOne({email})
         .then(clientInfo => {
           if (!clientInfo) {
@@ -44,14 +43,9 @@ const newClient = {
           }
           const passOk = bcrypt.compareSync(password, clientInfo.password);
           if (passOk) {
-            jwt.sign({id:clientInfo._id,email}, process.env.JWTPRIVATEKEY, (err,token) => {
-              if (err) {
-                console.log(err);
-                res.sendStatus(500);
-              } else {
-                res.cookie('token', token).json({id:clientInfo._id,email:clientInfo.email});
-              }
-            });
+            console.log(clientInfo)
+            const token = jwt.sign({id:clientInfo._id, email}, process.env.JWTPRIVATEKEY)
+            res.json({auth :true, token:token, data:clientInfo })
           } else {
             res.sendStatus(401);
           }
@@ -69,19 +63,22 @@ const newClient = {
 
   addUser: async (req, res) =>{
     try {
-          // create and add user to the database
-    const payload = jwt.verify(req.cookies.token, process.env.JWTPRIVATEKEY);
+    // create and add user to the database
+    const payload = jwt.verify(req.body.token, process.env.JWTPRIVATEKEY);
+
+    const hashedPassword = bcrypt.hashSync('1234', 10);
     const user = await new User({
       email: req.body.email,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       role: req.body.role,
       phone: req.body.phone,
+      password: hashedPassword,
       companyId: new mongoose.Types.ObjectId(payload.id)
     });
-    console.log(user);
     user.save().then((user) => {
-      res.json(user);
+      
+      res.sendStatus(201)
     });
     } catch (err) {
       res.send(err.message)
@@ -92,7 +89,7 @@ const newClient = {
   addLocation: async (req, res) => {
     try {
     // create and add location  to the database
-    const payload = jwt.verify(req.cookies.token, process.env.JWTPRIVATEKEY);
+    const payload = jwt.verify(req.body.token, process.env.JWTPRIVATEKEY);
     const location = await new Location({
       companyName: req.body.companyName,
       clockInTime: req.body.clockInTime,

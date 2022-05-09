@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { Location } = require("../models/location.scheme");
 const { User } = require("../models/user.scheme");
@@ -29,20 +30,46 @@ function ray_casting(point, polygon) {
 }
 
 const userController = {
+  login: async(req, res) => {
+    try{
+      const {email,password} = req.body;
+      await User.findOne({email})
+        .then(userInfo => {
+          if (!userInfo) {
+            return res.sendStatus(401);
+          }
+          const passOk = bcrypt.compareSync(password, userInfo.password);
+          if (passOk) {
+  
+            const token = jwt.sign({id:userInfo._id,email}, process.env.JWTPRIVATEKEY)
+            console.log('user logged in')
+            res.json({auth :true, token:token, data:userInfo })
+          } else {
+            console.log('user not logged in')
+            res.sendStatus(401);
+          }
+        })
+
+    }catch (err){
+      res.send(err.message)
+    }
+  },
+
   clockIn: async (req, res) => {
-    const payload = jwt.verify(req.cookies.token, process.env.JWTPRIVATEKEY);
+    const payload = jwt.verify(req.body.token, process.env.JWTPRIVATEKEY);
     const companyId = payload.id
     const currentTime = new Date();
 
     // get user position from the client
     let userCurrentPosition = req.body.userPosition;
+    console.log(userCurrentPosition)
     let userEmail = req.body.email;
+    console.log(userEmail)
 
     await Location.where({ locationId: new mongoose.Types.ObjectId(companyId) }).find(
       (err, locationId) => {
         let location = locationId[0].organizationLocation;
         let companyTime = locationId[0].clockInTime;
-        let companyId = locationId[0].companyId;
 
         let ray = ray_casting(userCurrentPosition, location);
 
@@ -76,6 +103,7 @@ const userController = {
         // check if user is on time
         let regex = new RegExp(":", "g"),
         userCurrentTime = currentTimeConsolidated;
+        console.log(companyTime, userCurrentTime)
 
         if (
           parseInt(companyTime.replace(regex, ""), 10) <
@@ -98,6 +126,7 @@ const userController = {
          // check if the user position is in range of the officePosition
         let clockedIn = false;
         if (ray === true) {
+
           // clockIn the user
           clockedIn = true;
           // update user clock in status
@@ -109,7 +138,8 @@ const userController = {
               if (err) {
                 console.log(err);
               } else {
-                res.send(`user clocked in ${data}`);
+                console.log(`user clocked in ${data}`);
+                // res.send(`user clocked in ${data}`);
               }
 
               // let doc = User.findOne(filter);
@@ -124,7 +154,8 @@ const userController = {
               if (err) {
                 console.log(err);
               } else {
-                res.send(`you are not within range ${data}`)
+                console.log(`you are not within range ${data}`)
+                // res.send(`you are not within range ${data}`)
               }
             }
           );

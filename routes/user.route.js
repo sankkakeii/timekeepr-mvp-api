@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/user.controller');
 
 
+router.post('/login', userController.login);
 router.post('/clock-in', userController.clockIn);
 router.post('/request-break', userController.requestBreak);
 router.get('/view-analytics', userController.analytics);

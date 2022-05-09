@@ -39,6 +39,11 @@ const userSchema = new mongoose.Schema({
             clockInTime: String
         }
     },
+    password:{
+        type: String,
+        required: [true, "password is required"],
+        trim:true,
+    },
     // log: {
     //     type: Array,
     // },
